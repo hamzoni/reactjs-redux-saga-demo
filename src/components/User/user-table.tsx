@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Table } from "evergreen-ui";
 import { getUsers } from "../../stores/user/user.action";
-import connect from './user-table';
-function UserTable() {
+import { connect } from "react-redux";
+import { RootState } from "../../stores/state";
+
+function UserTable(props) {
   const [users, setUsers] = useState([
     {
       id: 1,
@@ -29,11 +31,15 @@ function UserTable() {
   );
 }
 
+const mapStateToProps = (state: RootState) => {
+  return state.users;
+};
+
 const mapDispatchToProps = {
   getUsers,
 };
 
-export default connect(
-  null,
+export const UserTableComponent = connect(
+  mapStateToProps,
   mapDispatchToProps
-)(UserTable)
+)(UserTable) as any;

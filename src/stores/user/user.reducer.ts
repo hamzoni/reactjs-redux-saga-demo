@@ -1,18 +1,14 @@
 
-import { User } from '../../components/User/user';
 import { Action } from '../state';
 import { UserActions } from './user.action';
-
-interface StateInterface {
-  users: User[]
-}
+import { UserState } from '../state';
 
 const initialState = {
   users: [],
   error: null,
-}
+} as UserState;
 
-export default function UserReducer(state: StateInterface = initialState, action: Action) {
+export default function UserReducer(state: UserState = initialState, action: Action) {
   switch (action.type) {
     case UserActions.GET_USERS_SUCCESS: {
       return {
