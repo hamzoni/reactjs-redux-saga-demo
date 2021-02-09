@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { put, call, takeEvery } from 'redux-saga/effects'
 import { UserActions } from './user.action';
-import { Action } from '../state';
+import { Action, Paging } from '../state';
 
 const ROOT_URL = 'https://randomuser.me/api/';
 
@@ -10,7 +10,8 @@ const fetchUsers = (page: number = 1, size: number = 10) => {
   return axios.get(`${ROOT_URL}/?page=${page}&results=${size}`);
 };
 
-function* fetchUsersAsync(page: number = 1, size: number = 10) {
+function* fetchUsersAsync(payload: Paging | any) {
+  const { page, size } = payload;
   try {
     const users = yield call(fetchUsers, page, size);
     yield put({
@@ -23,7 +24,6 @@ function* fetchUsersAsync(page: number = 1, size: number = 10) {
       payload: error
     } as Action);
   }
-  
 }
 
 export function* watchFetchUsersAsync() {
