@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Avatar, Table, Text } from "evergreen-ui";
 import { getUsers } from "../../stores/user/user.action";
 import { connect, ConnectedProps } from "react-redux";
-import { RootState } from "../../stores/state";
+import { RootState, SortType } from "../../stores/state";
 import { Paging } from "../../stores/state";
 import { User } from "./user";
 
@@ -15,6 +15,8 @@ const UserTable: React.FC<UserTableProps> = (props) => {
     const initialRequest: Paging = {
       page: 1,
       size: 10,
+      sortField: null,
+      sortType: SortType.ASC,
     };
 
     setPageRequest(initialRequest);

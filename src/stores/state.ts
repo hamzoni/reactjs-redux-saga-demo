@@ -5,9 +5,15 @@ export interface Action {
   payload: any;
 }
 
+export enum SortType {
+  ASC = 'asc',
+  DESC = 'desc',
+}
 export interface Paging {
   page: number;
   size: number;
+  sortField?: string | any;
+  sortType?: SortType;
 }
 export interface UserState {
   users: User[],
