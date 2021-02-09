@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Avatar, Table, Text } from "evergreen-ui";
-import { getUsers } from "../../stores/user/user.action";
+import { getUsers, sortUsers } from "../../stores/user/user.action";
 import { connect, ConnectedProps } from "react-redux";
 import { RootState, SortType } from "../../stores/state";
 import { Paging } from "../../stores/state";
@@ -27,7 +27,14 @@ const UserTable: React.FC<UserTableProps> = (props) => {
       return;
     }
     props.getUsers(pageRequest);
-  }, [pageRequest]);
+  }, [pageRequest.page, pageRequest.size]);
+
+  useEffect(() => {
+    if (pageRequest.page === undefined) {
+      return;
+    }
+    props.sortUsers(pageRequest);
+  }, [pageRequest.sortType, pageRequest.sortField]);
 
   useEffect(() => {
     setUsers(props.users);
@@ -103,11 +110,11 @@ const UserTable: React.FC<UserTableProps> = (props) => {
       <Table className="mt-3">
         <Table.Head>
           <Table.TextHeaderCell></Table.TextHeaderCell>
-          <Table.TextHeaderCell onClick={() => setSort('user.name')}>
+          <Table.TextHeaderCell onClick={() => setSort('name')}>
             Name
             <i className="fa fa-fw fa-sort float-right" />
           </Table.TextHeaderCell>
-          <Table.TextHeaderCell onClick={() => setSort('user.username')}>
+          <Table.TextHeaderCell onClick={() => setSort('username')}>
             Username
             <i className="fa fa-fw fa-sort float-right" />
           </Table.TextHeaderCell>
@@ -132,7 +139,7 @@ const UserTable: React.FC<UserTableProps> = (props) => {
           ))}
         </Table.Body>
       </Table>
-      {PagingComponent()}
+      {pageRequest.page && PagingComponent()}
     </>
   );
 };
@@ -143,6 +150,7 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: any) => ({
   getUsers: (payload: Paging) => dispatch(getUsers(payload)),
+  sortUsers: (payload: Paging) => dispatch(sortUsers(payload)),
 });
 
 type UserTableProps = ConnectedProps<typeof connector>;
