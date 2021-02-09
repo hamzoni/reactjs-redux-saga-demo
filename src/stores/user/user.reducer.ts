@@ -9,6 +9,7 @@ interface StateInterface {
 
 const initialState = {
   users: [],
+  error: null,
 }
 
 export default function UserReducer(state: StateInterface = initialState, action: Action) {
@@ -17,6 +18,12 @@ export default function UserReducer(state: StateInterface = initialState, action
       return {
         ...state,
         users: action.payload
+      }
+    }
+    case UserActions.GET_USERS_FAILED: {
+      return {
+        ...state,
+        error: action.payload
       }
     }
     default:
