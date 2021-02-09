@@ -9,10 +9,14 @@ const fetchUsers = (page: number = 1, size: number = 10) => {
   return axios.get(`${ROOT_URL}/?page=${page}&results=${size}`);
 };
 
-export function* fetchUsersSaga(page: number = 1, size: number = 10) {
+function* fetchUsersAsync(page: number = 1, size: number = 10) {
   const users = yield call(fetchUsers, page, size);
   yield put({
     type: UserActions.GET_USERS_SUCCESS,
     users
   });
+}
+
+export function* watchFetchUsersAsync() {
+  yield takeEvery(UserActions.GET_USERS, fetchUsersAsync)
 }
