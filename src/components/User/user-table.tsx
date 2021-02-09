@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Table } from "evergreen-ui";
 import { getUsers } from "../../stores/user/user.action";
-import { connect } from "react-redux";
+import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../../stores/state";
 
-function UserTable(props) {
+const UserTable: React.FC<UserTableProps> = (props) => {
   const [users, setUsers] = useState([
     {
       id: 1,
@@ -39,7 +39,11 @@ const mapDispatchToProps = {
   getUsers,
 };
 
-export const UserTableComponent = connect(
+type UserTableProps = ConnectedProps<typeof connector>;
+
+const connector = connect(
   mapStateToProps,
   mapDispatchToProps
-)(UserTable) as any;
+);
+
+export default connector(UserTable);
