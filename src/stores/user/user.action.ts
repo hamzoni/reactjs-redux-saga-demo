@@ -1,5 +1,5 @@
 
-import { Action } from '../state';
+import { Action, Paging } from '../state';
 
 export enum UserActions {
   GET_USERS = 'GET_USERS',
@@ -7,11 +7,9 @@ export enum UserActions {
   GET_USERS_FAILED = 'GET_USERS_FAILED',
 }
 
-export const getUsers = (page: number = 1, size: number = 10): Action => {
+export const getUsers = (payload: Paging): Action => {
   return {
     type: UserActions.GET_USERS,
-    payload: {
-      page, size
-    }
+    payload,
   }
 }

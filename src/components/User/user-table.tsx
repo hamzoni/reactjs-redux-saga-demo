@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Table } from "evergreen-ui";
 import { getUsers } from "../../stores/user/user.action";
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../../stores/state";
+import { Paging } from "../../stores/state";
 
 const UserTable: React.FC<UserTableProps> = (props) => {
   const [users, setUsers] = useState([
@@ -12,6 +13,24 @@ const UserTable: React.FC<UserTableProps> = (props) => {
       age: 10,
     },
   ]);
+
+  const [pageRequest, setPageRequest] = useState({} as Paging | any);
+
+  useEffect(() => {
+    const initialRequest: Paging = {
+      page: 1,
+      size: 10,
+    };
+
+    setPageRequest(initialRequest);
+  }, []);
+
+  useEffect(() => {
+    if (pageRequest.page === undefined) {
+      return;
+    }
+    props.getUsers(pageRequest);
+  }, [pageRequest]);
 
   return (
     <Table>
@@ -29,7 +48,7 @@ const UserTable: React.FC<UserTableProps> = (props) => {
       </Table.Body>
     </Table>
   );
-}
+};
 
 const mapStateToProps = (state: RootState) => {
   return state.users;
@@ -41,9 +60,6 @@ const mapDispatchToProps = {
 
 type UserTableProps = ConnectedProps<typeof connector>;
 
-const connector = connect(
-  mapStateToProps,
-  mapDispatchToProps
-);
+const connector = connect(mapStateToProps, mapDispatchToProps);
 
 export default connector(UserTable);
