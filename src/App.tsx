@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import UserTable from "./components/User/user-table";
+import { connect } from "react-redux";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -16,4 +17,4 @@ function App() {
   );
 }
 
-export default App;
+export default connect()(App);

@@ -2,6 +2,7 @@
 import { Action } from '../state';
 import { UserActions } from './user.action';
 import { UserState } from '../state';
+import { createUser } from '../../components/User/user';
 
 const initialState = {
   users: [],
@@ -10,10 +11,16 @@ const initialState = {
 
 export default function UserReducer(state: UserState = initialState, action: Action) {
   switch (action.type) {
+    case UserActions.GET_USERS: {
+      return state;
+    }
     case UserActions.GET_USERS_SUCCESS: {
+      const { results } = action.payload.data;
+      const users = results.map(createUser);
+
       return {
         ...state,
-        users: action.payload
+        users,
       }
     }
     case UserActions.GET_USERS_FAILED: {

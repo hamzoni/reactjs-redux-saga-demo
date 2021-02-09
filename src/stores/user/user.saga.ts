@@ -1,17 +1,17 @@
 
 import axios from 'axios';
-import { put, call, takeEvery } from 'redux-saga/effects'
+import { put, call, takeEvery, takeLatest } from 'redux-saga/effects'
 import { UserActions } from './user.action';
-import { Action, Paging } from '../state';
+import { Action } from '../state';
 
 const ROOT_URL = 'https://randomuser.me/api/';
 
 const fetchUsers = (page: number = 1, size: number = 10) => {
-  return axios.get(`${ROOT_URL}/?page=${page}&results=${size}`);
+  return axios.get(`${ROOT_URL}?page=${page}&results=${size}`);
 };
 
-function* fetchUsersAsync(payload: Paging | any) {
-  const { page, size } = payload;
+function* fetchUsersAsync(action: Action | any) {
+  const { page, size } = action.payload;
   try {
     const users = yield call(fetchUsers, page, size);
     yield put({
@@ -27,5 +27,5 @@ function* fetchUsersAsync(payload: Paging | any) {
 }
 
 export function* watchFetchUsersAsync() {
-  yield takeEvery(UserActions.GET_USERS, fetchUsersAsync)
+  yield takeLatest(UserActions.GET_USERS, fetchUsersAsync)
 }
