@@ -36,9 +36,26 @@ const UserTable: React.FC<UserTableProps> = (props) => {
   const setPage = (page: number) => {
     setPageRequest({
       ...pageRequest,
-      page
+      page,
     });
-  }
+  };
+
+  const setSort = (sortField: string) => {
+    // default sort type is ASC
+    let sortType = SortType.ASC;
+    if (
+      pageRequest.sortField === sortField &&
+      pageRequest.sortType === SortType.ASC
+    ) {
+      sortType = SortType.DESC;
+    }
+
+    setPageRequest({
+      ...pageRequest,
+      sortField,
+      sortType,
+    });
+  };
 
   const PagingComponent = () => {
     return (
@@ -52,17 +69,26 @@ const UserTable: React.FC<UserTableProps> = (props) => {
             </li>
           )}
           {pageRequest.page > 1 && (
-            <li className="page-item" onClick={() => setPage(pageRequest.page - 1)}>
+            <li
+              className="page-item"
+              onClick={() => setPage(pageRequest.page - 1)}
+            >
               <span className="page-link">{pageRequest.page - 1}</span>
             </li>
           )}
           <li className="page-item active">
             <span className="page-link">{pageRequest.page}</span>
           </li>
-          <li className="page-item" onClick={() => setPage(pageRequest.page + 1)}>
+          <li
+            className="page-item"
+            onClick={() => setPage(pageRequest.page + 1)}
+          >
             <span className="page-link">{pageRequest.page + 1}</span>
           </li>
-          <li className="page-item" onClick={() => setPage(pageRequest.page + 1)}>
+          <li
+            className="page-item"
+            onClick={() => setPage(pageRequest.page + 1)}
+          >
             <span className="page-link">
               <span aria-hidden="true">&raquo;</span>
             </span>
@@ -77,10 +103,16 @@ const UserTable: React.FC<UserTableProps> = (props) => {
       <Table className="mt-3">
         <Table.Head>
           <Table.TextHeaderCell></Table.TextHeaderCell>
-          <Table.TextHeaderCell>Name</Table.TextHeaderCell>
-          <Table.TextHeaderCell>Username</Table.TextHeaderCell>
+          <Table.TextHeaderCell onClick={() => setSort('user.name')}>
+            Name
+            <i className="fa fa-fw fa-sort float-right" />
+          </Table.TextHeaderCell>
+          <Table.TextHeaderCell onClick={() => setSort('user.username')}>
+            Username
+            <i className="fa fa-fw fa-sort float-right" />
+          </Table.TextHeaderCell>
         </Table.Head>
-        <Table.Body height={240}>
+        <Table.Body height={320}>
           {users.map((user) => (
             <Table.Row key={user.username}>
               <Table.Cell display="flex" alignItems="center">
